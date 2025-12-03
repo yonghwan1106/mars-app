@@ -1,64 +1,162 @@
-import Image from "next/image";
+'use client';
 
-export default function Home() {
+import { useEffect, useState } from 'react';
+import { useStore } from '@/store/useStore';
+import { Header } from '@/components/Header';
+import { SummaryCards } from '@/components/SummaryCards';
+import { SiteList } from '@/components/SiteList';
+import { AlertFeed } from '@/components/AlertFeed';
+import { SiteMap } from '@/components/SiteMap';
+import { WeatherWidget } from '@/components/WeatherWidget';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Activity, Clock } from 'lucide-react';
+
+export default function Dashboard() {
+  const {
+    sitesWithRisk,
+    alerts,
+    summary,
+    unreadAlertCount,
+    lastUpdated,
+    refreshData,
+    acknowledgeAlert,
+  } = useStore();
+
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isInitialized, setIsInitialized] = useState(false);
+
+  // Initial data load
+  useEffect(() => {
+    if (!isInitialized) {
+      refreshData();
+      setIsInitialized(true);
+    }
+  }, [isInitialized, refreshData]);
+
+  // Auto refresh every 30 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      refreshData();
+    }, 30000);
+
+    return () => clearInterval(interval);
+  }, [refreshData]);
+
+  const handleRefresh = () => {
+    setIsRefreshing(true);
+    refreshData();
+    setTimeout(() => setIsRefreshing(false), 500);
+  };
+
+  const handleAcknowledge = (alertId: string) => {
+    acknowledgeAlert(alertId, '이영희');
+  };
+
+  if (!isInitialized || sitesWithRisk.length === 0) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4 animate-pulse">
+            <span className="text-white font-bold text-2xl">M</span>
+          </div>
+          <h1 className="text-xl font-bold text-gray-900">MARS</h1>
+          <p className="text-gray-500 mt-2">데이터를 불러오는 중...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="min-h-screen bg-gray-50">
+      <Header
+        unreadAlerts={unreadAlertCount}
+        lastUpdated={lastUpdated}
+        onRefresh={handleRefresh}
+        isRefreshing={isRefreshing}
+      />
+
+      <main className="container mx-auto px-4 py-6 space-y-6">
+        {/* Live indicator */}
+        <div className="flex items-center gap-2 text-sm text-gray-600">
+          <Activity className="w-4 h-4 text-green-500 animate-pulse" />
+          <span>실시간 모니터링 중</span>
+          <span className="text-gray-400">|</span>
+          <Clock className="w-4 h-4" />
+          <span>30초마다 자동 갱신</span>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+
+        {/* Summary Cards */}
+        <SummaryCards summary={summary} />
+
+        {/* Weather Widget */}
+        <WeatherWidget />
+
+        {/* Main Content */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Map and Site List */}
+          <div className="lg:col-span-2 space-y-6">
+            <SiteMap sites={sitesWithRisk} height="400px" />
+
+            <Tabs defaultValue="all" className="w-full">
+              <TabsList className="grid w-full grid-cols-4">
+                <TabsTrigger value="all">전체 ({sitesWithRisk.length})</TabsTrigger>
+                <TabsTrigger value="danger" className="text-red-600">
+                  위험 ({summary.dangerSites})
+                </TabsTrigger>
+                <TabsTrigger value="caution" className="text-yellow-600">
+                  주의 ({summary.cautionSites})
+                </TabsTrigger>
+                <TabsTrigger value="safe" className="text-green-600">
+                  안전 ({summary.safeSites})
+                </TabsTrigger>
+              </TabsList>
+              <TabsContent value="all">
+                <SiteList sites={sitesWithRisk} title="전체 현장" maxHeight="400px" />
+              </TabsContent>
+              <TabsContent value="danger">
+                <SiteList
+                  sites={sitesWithRisk.filter(s => s.risk.riskLevel === 'danger')}
+                  title="위험 현장"
+                  maxHeight="400px"
+                />
+              </TabsContent>
+              <TabsContent value="caution">
+                <SiteList
+                  sites={sitesWithRisk.filter(s => s.risk.riskLevel === 'caution')}
+                  title="주의 현장"
+                  maxHeight="400px"
+                />
+              </TabsContent>
+              <TabsContent value="safe">
+                <SiteList
+                  sites={sitesWithRisk.filter(s => s.risk.riskLevel === 'safe')}
+                  title="안전 현장"
+                  maxHeight="400px"
+                />
+              </TabsContent>
+            </Tabs>
+          </div>
+
+          {/* Alert Feed */}
+          <div className="lg:col-span-1">
+            <AlertFeed
+              alerts={alerts}
+              maxHeight="900px"
+              onAcknowledge={handleAcknowledge}
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+          </div>
         </div>
+
+        {/* Footer */}
+        <footer className="text-center text-sm text-gray-500 py-8 border-t">
+          <p className="font-medium text-gray-700 mb-1">
+            MARS - Maritime AI Risk-prediction System
+          </p>
+          <p>AI 기반 해상작업 위험예측 시스템</p>
+          <p className="mt-2">
+            © 2025 한국어촌어항공단 안전혁신 공모전 출품작
+          </p>
+        </footer>
       </main>
     </div>
   );
