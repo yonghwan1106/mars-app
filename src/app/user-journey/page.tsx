@@ -229,29 +229,59 @@ export default function UserJourneyPage() {
 
         {/* Persona Selector */}
         <div className="flex justify-center gap-4">
-          {Object.entries(personas).map(([key, persona]) => {
-            const Icon = persona.icon;
-            const isSelected = selectedPersona === key;
-            return (
-              <button
-                key={key}
-                onClick={() => setSelectedPersona(key as 'site' | 'hq' | 'exec')}
-                className={`p-4 rounded-xl border-2 transition-all ${
-                  isSelected
-                    ? `border-${persona.color}-500 bg-${persona.color}-50`
-                    : 'border-gray-200 bg-white hover:border-gray-300'
-                }`}
-              >
-                <div className={`w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-2 ${
-                  isSelected ? `bg-${persona.color}-600` : 'bg-gray-200'
-                }`}>
-                  <Icon className={`w-6 h-6 ${isSelected ? 'text-white' : 'text-gray-600'}`} />
-                </div>
-                <p className="font-bold text-sm">{persona.name}</p>
-                <p className="text-xs text-gray-500">{persona.role}</p>
-              </button>
-            );
-          })}
+          {/* 현장 안전관리자 */}
+          <button
+            onClick={() => setSelectedPersona('site')}
+            className={`p-4 rounded-xl border-2 transition-all ${
+              selectedPersona === 'site'
+                ? 'border-blue-500 bg-blue-50 shadow-lg'
+                : 'border-gray-200 bg-white hover:border-gray-300'
+            }`}
+          >
+            <div className={`w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-2 ${
+              selectedPersona === 'site' ? 'bg-blue-600' : 'bg-gray-200'
+            }`}>
+              <HardHat className={`w-6 h-6 ${selectedPersona === 'site' ? 'text-white' : 'text-gray-600'}`} />
+            </div>
+            <p className="font-bold text-sm">김안전</p>
+            <p className="text-xs text-gray-500">현장 안전관리자</p>
+          </button>
+
+          {/* 본사 안전관제팀 */}
+          <button
+            onClick={() => setSelectedPersona('hq')}
+            className={`p-4 rounded-xl border-2 transition-all ${
+              selectedPersona === 'hq'
+                ? 'border-purple-500 bg-purple-50 shadow-lg'
+                : 'border-gray-200 bg-white hover:border-gray-300'
+            }`}
+          >
+            <div className={`w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-2 ${
+              selectedPersona === 'hq' ? 'bg-purple-600' : 'bg-gray-200'
+            }`}>
+              <Building2 className={`w-6 h-6 ${selectedPersona === 'hq' ? 'text-white' : 'text-gray-600'}`} />
+            </div>
+            <p className="font-bold text-sm">이관제</p>
+            <p className="text-xs text-gray-500">본사 안전관제팀</p>
+          </button>
+
+          {/* 안전보건실장 */}
+          <button
+            onClick={() => setSelectedPersona('exec')}
+            className={`p-4 rounded-xl border-2 transition-all ${
+              selectedPersona === 'exec'
+                ? 'border-green-500 bg-green-50 shadow-lg'
+                : 'border-gray-200 bg-white hover:border-gray-300'
+            }`}
+          >
+            <div className={`w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-2 ${
+              selectedPersona === 'exec' ? 'bg-green-600' : 'bg-gray-200'
+            }`}>
+              <Briefcase className={`w-6 h-6 ${selectedPersona === 'exec' ? 'text-white' : 'text-gray-600'}`} />
+            </div>
+            <p className="font-bold text-sm">박임원</p>
+            <p className="text-xs text-gray-500">안전보건실장</p>
+          </button>
         </div>
 
         {/* Current Persona Info */}

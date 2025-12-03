@@ -1,11 +1,12 @@
 'use client';
 
-import { Bell, RefreshCw, Settings, User, Info, Map } from 'lucide-react';
+import { Bell, RefreshCw, Settings, User, Info, Map, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { formatDistanceToNow } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 interface HeaderProps {
   unreadAlerts: number;
@@ -16,6 +17,7 @@ interface HeaderProps {
 
 export function Header({ unreadAlerts, lastUpdated, onRefresh, isRefreshing }: HeaderProps) {
   const timeAgo = formatDistanceToNow(lastUpdated, { addSuffix: true, locale: ko });
+  const pathname = usePathname();
 
   return (
     <header className="bg-white border-b sticky top-0 z-50">
@@ -35,14 +37,44 @@ export function Header({ unreadAlerts, lastUpdated, onRefresh, isRefreshing }: H
 
             {/* Navigation */}
             <nav className="hidden md:flex items-center gap-1 ml-4">
+              <Link href="/">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className={`gap-2 ${
+                    pathname === '/'
+                      ? 'text-blue-600 bg-blue-50'
+                      : 'text-gray-600 hover:text-gray-900'
+                  }`}
+                >
+                  <Home className="w-4 h-4" />
+                  대시보드
+                </Button>
+              </Link>
               <Link href="/about">
-                <Button variant="ghost" size="sm" className="gap-2 text-gray-600 hover:text-gray-900">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className={`gap-2 ${
+                    pathname === '/about'
+                      ? 'text-blue-600 bg-blue-50'
+                      : 'text-gray-600 hover:text-gray-900'
+                  }`}
+                >
                   <Info className="w-4 h-4" />
                   프로젝트 소개
                 </Button>
               </Link>
               <Link href="/user-journey">
-                <Button variant="ghost" size="sm" className="gap-2 text-gray-600 hover:text-gray-900">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className={`gap-2 ${
+                    pathname === '/user-journey'
+                      ? 'text-blue-600 bg-blue-50'
+                      : 'text-gray-600 hover:text-gray-900'
+                  }`}
+                >
                   <Map className="w-4 h-4" />
                   User Journey
                 </Button>

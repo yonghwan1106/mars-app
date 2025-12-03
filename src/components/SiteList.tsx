@@ -62,7 +62,7 @@ function SiteListItem({ site }: { site: SiteWithRisk }) {
       <div
         className={cn(
           'p-3 rounded-lg border-l-4 border border-gray-200 cursor-pointer',
-          'transition-all hover:shadow-md hover:scale-[1.01]',
+          'transition-all duration-200 hover:shadow-lg hover:scale-[1.02] hover:border-gray-300',
           riskColors[site.risk.riskLevel]
         )}
       >

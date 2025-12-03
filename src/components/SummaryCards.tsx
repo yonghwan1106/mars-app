@@ -60,7 +60,7 @@ export function SummaryCards({ summary }: SummaryCardsProps) {
         <Card
           key={card.title}
           className={cn(
-            'border-2 transition-all hover:shadow-md',
+            'border-2 transition-all duration-200 hover:shadow-lg hover:scale-[1.02] cursor-pointer',
             card.borderColor
           )}
         >
