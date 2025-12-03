@@ -61,26 +61,26 @@ export function SummaryCards({ summary }: SummaryCardsProps) {
           key={card.title}
           className={cn(
             'border-2 transition-all duration-200 hover:shadow-lg hover:scale-[1.02] cursor-pointer',
-            card.borderColor
+            card.borderColor,
+            card.bgColor
           )}
         >
-          <CardContent className="p-4">
+          <CardContent className="p-5">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500 font-medium">{card.title}</p>
-                <p className={cn('text-3xl font-bold mt-1', card.color)}>
+                <p className="text-base text-gray-600 font-semibold">{card.title}</p>
+                <p className={cn('text-4xl font-bold mt-2', card.color)}>
                   {card.value}
                 </p>
               </div>
               <div
                 className={cn(
-                  'p-3 rounded-full relative',
-                  card.bgColor
+                  'p-4 rounded-full relative bg-white/60',
                 )}
               >
-                <card.icon className={cn('w-6 h-6', card.color)} />
+                <card.icon className={cn('w-8 h-8', card.color)} />
                 {card.pulse && (
-                  <span className="absolute top-0 right-0 w-3 h-3 bg-red-500 rounded-full animate-pulse" />
+                  <span className="absolute top-0 right-0 w-4 h-4 bg-red-500 rounded-full animate-pulse" />
                 )}
               </div>
             </div>
