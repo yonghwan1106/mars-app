@@ -1,6 +1,6 @@
 'use client';
 
-import { Bell, RefreshCw, Settings, User } from 'lucide-react';
+import { Bell, RefreshCw, Settings, User, Info, Map } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { formatDistanceToNow } from 'date-fns';
@@ -22,15 +22,33 @@ export function Header({ unreadAlerts, lastUpdated, onRefresh, isRefreshing }: H
       <div className="container mx-auto px-4 py-3">
         <div className="flex items-center justify-between">
           {/* Logo & Title */}
-          <Link href="/" className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-800 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-lg">M</span>
-            </div>
-            <div>
-              <h1 className="text-xl font-bold text-gray-900">MARS</h1>
-              <p className="text-xs text-gray-500">해상작업 위험예측 시스템</p>
-            </div>
-          </Link>
+          <div className="flex items-center gap-6">
+            <Link href="/" className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-800 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-lg">M</span>
+              </div>
+              <div>
+                <h1 className="text-xl font-bold text-gray-900">MARS</h1>
+                <p className="text-xs text-gray-500">해상작업 위험예측 시스템</p>
+              </div>
+            </Link>
+
+            {/* Navigation */}
+            <nav className="hidden md:flex items-center gap-1 ml-4">
+              <Link href="/about">
+                <Button variant="ghost" size="sm" className="gap-2 text-gray-600 hover:text-gray-900">
+                  <Info className="w-4 h-4" />
+                  프로젝트 소개
+                </Button>
+              </Link>
+              <Link href="/user-journey">
+                <Button variant="ghost" size="sm" className="gap-2 text-gray-600 hover:text-gray-900">
+                  <Map className="w-4 h-4" />
+                  User Journey
+                </Button>
+              </Link>
+            </nav>
+          </div>
 
           {/* Status & Actions */}
           <div className="flex items-center gap-4">

@@ -329,8 +329,11 @@ export default function SiteDetailPage({ params }: PageProps) {
             MARS - Maritime AI Risk-prediction System
           </p>
           <p>AI 기반 해상작업 위험예측 시스템</p>
-          <p className="mt-2">
-            © 2025 한국어촌어항공단 안전혁신 공모전 출품작
+          <p className="mt-2 text-blue-600 font-semibold">
+            🏆 한국어촌어항공단 2025년 안전혁신 공모전 출품작
+          </p>
+          <p className="mt-1 text-gray-600">
+            제작: 박용환 (크리에이티브 넥서스)
           </p>
         </footer>
       </main>
