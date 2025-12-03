@@ -8,6 +8,7 @@ import { SiteList } from '@/components/SiteList';
 import { AlertFeed } from '@/components/AlertFeed';
 import { SiteMap } from '@/components/SiteMap';
 import { WeatherWidget } from '@/components/WeatherWidget';
+import { Footer } from '@/components/Footer';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Activity, Clock } from 'lucide-react';
 
@@ -95,7 +96,7 @@ export default function Dashboard() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Map and Site List */}
           <div className="lg:col-span-2 space-y-6">
-            <SiteMap sites={sitesWithRisk} height="400px" />
+            <SiteMap sites={sitesWithRisk} height="500px" />
 
             <Tabs defaultValue="all" className="w-full">
               <TabsList className="grid w-full grid-cols-4">
@@ -147,20 +148,9 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Footer */}
-        <footer className="text-center text-sm text-gray-500 py-8 border-t">
-          <p className="font-medium text-gray-700 mb-1">
-            MARS - Maritime AI Risk-prediction System
-          </p>
-          <p>AI 기반 해상작업 위험예측 시스템</p>
-          <p className="mt-2 text-blue-600 font-semibold">
-            🏆 한국어촌어항공단 2025년 안전혁신 공모전 출품작
-          </p>
-          <p className="mt-1 text-gray-600">
-            제작: 박용환 (크리에이티브 넥서스)
-          </p>
-        </footer>
       </main>
+
+      <Footer />
     </div>
   );
 }
