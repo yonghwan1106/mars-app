@@ -68,7 +68,7 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
       <Header
         unreadAlerts={unreadAlertCount}
         lastUpdated={lastUpdated}
@@ -76,7 +76,7 @@ export default function Dashboard() {
         isRefreshing={isRefreshing}
       />
 
-      <main className="container mx-auto px-4 py-6 space-y-6">
+      <main className="container mx-auto px-4 py-6 space-y-6 flex-1">
         {/* Live indicator */}
         <div className="flex items-center gap-2 text-sm text-gray-600">
           <Activity className="w-4 h-4 text-green-500 animate-pulse" />
