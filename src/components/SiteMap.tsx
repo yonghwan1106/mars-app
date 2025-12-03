@@ -32,7 +32,7 @@ export function SiteMap({ sites, height = '400px' }: SiteMapProps) {
   }, []);
 
   return (
-    <Card className="h-full">
+    <Card>
       <CardHeader className="pb-3">
         <CardTitle className="text-lg flex items-center gap-2">
           <Map className="w-5 h-5 text-blue-600" />
