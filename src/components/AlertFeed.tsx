@@ -1,13 +1,16 @@
 'use client';
 
+import { useEffect, useRef } from 'react';
 import { Alert } from '@/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Bell, AlertTriangle, XCircle, Info, Check } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Bell, AlertTriangle, XCircle, Info, Check, Volume2, VolumeX } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { formatDistanceToNow } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import Link from 'next/link';
+import { useAlertSound } from '@/hooks/useAlertSound';
 
 interface AlertFeedProps {
   alerts: Alert[];
@@ -16,6 +19,31 @@ interface AlertFeedProps {
 }
 
 export function AlertFeed({ alerts, maxHeight = '400px', onAcknowledge }: AlertFeedProps) {
+  const { playAlertSound, isMuted, toggleMute, isSupported } = useAlertSound({ enabled: true });
+  const prevAlertCountRef = useRef(alerts.length);
+  const prevCriticalCountRef = useRef(alerts.filter(a => a.severity === 'critical' && !a.readAt).length);
+
+  // Play sound when new critical/warning alerts arrive
+  useEffect(() => {
+    const currentCriticalCount = alerts.filter(a => a.severity === 'critical' && !a.readAt).length;
+    const currentWarningCount = alerts.filter(a => a.severity === 'warning' && !a.readAt).length;
+
+    // New critical alert
+    if (currentCriticalCount > prevCriticalCountRef.current) {
+      playAlertSound('critical');
+    }
+    // New warning alert (only if no new critical)
+    else if (alerts.length > prevAlertCountRef.current && currentWarningCount > 0) {
+      const newestAlert = alerts[0];
+      if (newestAlert && newestAlert.severity === 'warning' && !newestAlert.readAt) {
+        playAlertSound('warning');
+      }
+    }
+
+    prevAlertCountRef.current = alerts.length;
+    prevCriticalCountRef.current = currentCriticalCount;
+  }, [alerts, playAlertSound]);
+
   return (
     <Card className="h-full">
       <CardHeader className="pb-3">
@@ -26,6 +54,21 @@ export function AlertFeed({ alerts, maxHeight = '400px', onAcknowledge }: AlertF
             <span className="bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">
               {alerts.filter(a => !a.readAt).length}
             </span>
+          )}
+          {isSupported && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={toggleMute}
+              className="ml-auto h-7 w-7 p-0"
+              title={isMuted ? '알림 소리 켜기' : '알림 소리 끄기'}
+            >
+              {isMuted ? (
+                <VolumeX className="w-4 h-4 text-gray-400" />
+              ) : (
+                <Volume2 className="w-4 h-4 text-blue-500" />
+              )}
+            </Button>
           )}
         </CardTitle>
       </CardHeader>

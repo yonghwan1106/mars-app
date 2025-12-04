@@ -10,7 +10,7 @@ import { SiteMap } from '@/components/SiteMap';
 import { WeatherWidget } from '@/components/WeatherWidget';
 import { Footer } from '@/components/Footer';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Activity, Clock } from 'lucide-react';
+import { Activity, Clock, Trophy } from 'lucide-react';
 
 export default function Dashboard() {
   const {
@@ -77,6 +77,16 @@ export default function Dashboard() {
       />
 
       <main className="container mx-auto px-4 py-6 space-y-6 flex-1">
+        {/* 공모전 뱃지 */}
+        <div className="flex justify-center">
+          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-50 to-yellow-50 border border-amber-200 rounded-full px-4 py-2 shadow-sm">
+            <Trophy className="w-5 h-5 text-amber-500" />
+            <span className="text-sm font-medium text-amber-800">
+              한국어촌어항공단 2025년 안전혁신 공모전 출품작
+            </span>
+          </div>
+        </div>
+
         {/* Live indicator */}
         <div className="flex items-center gap-2 text-sm text-gray-600">
           <Activity className="w-4 h-4 text-green-500 animate-pulse" />

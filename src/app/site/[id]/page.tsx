@@ -7,6 +7,7 @@ import { RiskBadge } from '@/components/RiskBadge';
 import { RiskGauge, RiskFactorBar } from '@/components/RiskGauge';
 import { ForecastChart } from '@/components/ForecastChart';
 import { RecommendationCard } from '@/components/RecommendationCard';
+import { PdfReportButton } from '@/components/PdfReport';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
@@ -152,6 +153,7 @@ export default function SiteDetailPage({ params }: PageProps) {
           <div className="flex items-center gap-2 text-sm text-gray-500">
             <Timer className="w-4 h-4" />
             <span>마지막 갱신: {timeAgo}</span>
+            <PdfReportButton site={siteData} />
             <Button variant="outline" size="sm" onClick={handleRefresh} className="ml-2">
               <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`} />
             </Button>

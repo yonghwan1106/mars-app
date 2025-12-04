@@ -97,8 +97,11 @@ export default function MapComponent({ sites }: MapComponentProps) {
           position={[site.location.lat, site.location.lng]}
           icon={icons[site.risk.riskLevel]}
         >
-          <Popup>
-            <div className="min-w-[200px]">
+          <Popup
+            autoPan={true}
+            autoPanPadding={[50, 50]}
+          >
+            <div className="min-w-[200px] max-w-[280px]">
               <div className="flex items-center justify-between mb-2">
                 <h3 className="font-bold text-sm">{site.name}</h3>
                 <RiskBadge level={site.risk.riskLevel} size="sm" />
@@ -113,7 +116,7 @@ export default function MapComponent({ sites }: MapComponentProps) {
               </div>
               <Link
                 href={`/site/${site.id}`}
-                className="block mt-3 text-center text-sm text-white bg-blue-600 hover:bg-blue-700 rounded py-1.5 transition-colors"
+                className="block mt-3 text-center text-sm text-white font-semibold bg-blue-600 hover:bg-blue-700 rounded py-2 transition-colors shadow-md"
               >
                 상세 보기
               </Link>

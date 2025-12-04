@@ -1,6 +1,7 @@
 'use client';
 
-import { Bell, RefreshCw, Settings, User, Info, Map, Home } from 'lucide-react';
+import { useState } from 'react';
+import { Bell, RefreshCw, Settings, User, Info, Map, Home, FileText, Phone, Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { formatDistanceToNow } from 'date-fns';
@@ -18,6 +19,7 @@ interface HeaderProps {
 export function Header({ unreadAlerts, lastUpdated, onRefresh, isRefreshing }: HeaderProps) {
   const timeAgo = formatDistanceToNow(lastUpdated, { addSuffix: true, locale: ko });
   const pathname = usePathname();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <header className="bg-white border-b sticky top-0 z-50">
@@ -76,7 +78,35 @@ export function Header({ unreadAlerts, lastUpdated, onRefresh, isRefreshing }: H
                   }`}
                 >
                   <Map className="w-4 h-4" />
-                  User Journey
+                  사용자 여정
+                </Button>
+              </Link>
+              <Link href="/work-log">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className={`gap-2 ${
+                    pathname === '/work-log'
+                      ? 'text-blue-600 bg-blue-50'
+                      : 'text-gray-600 hover:text-gray-900'
+                  }`}
+                >
+                  <FileText className="w-4 h-4" />
+                  작업일지
+                </Button>
+              </Link>
+              <Link href="/emergency">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className={`gap-2 ${
+                    pathname === '/emergency'
+                      ? 'text-red-600 bg-red-50'
+                      : 'text-red-600 hover:text-red-700 hover:bg-red-50'
+                  }`}
+                >
+                  <Phone className="w-4 h-4" />
+                  비상연락
                 </Button>
               </Link>
             </nav>
@@ -131,8 +161,94 @@ export function Header({ unreadAlerts, lastUpdated, onRefresh, isRefreshing }: H
                 <p className="text-xs text-gray-500">안전보건실</p>
               </div>
             </div>
+
+            {/* Mobile Menu Button */}
+            <Button
+              variant="ghost"
+              size="sm"
+              className="md:hidden"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            >
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </Button>
           </div>
         </div>
+
+        {/* Mobile Navigation */}
+        {mobileMenuOpen && (
+          <nav className="md:hidden border-t py-3 space-y-1">
+            <Link href="/" onClick={() => setMobileMenuOpen(false)}>
+              <Button
+                variant="ghost"
+                size="sm"
+                className={`w-full justify-start gap-2 ${
+                  pathname === '/'
+                    ? 'text-blue-600 bg-blue-50'
+                    : 'text-gray-600'
+                }`}
+              >
+                <Home className="w-4 h-4" />
+                대시보드
+              </Button>
+            </Link>
+            <Link href="/about" onClick={() => setMobileMenuOpen(false)}>
+              <Button
+                variant="ghost"
+                size="sm"
+                className={`w-full justify-start gap-2 ${
+                  pathname === '/about'
+                    ? 'text-blue-600 bg-blue-50'
+                    : 'text-gray-600'
+                }`}
+              >
+                <Info className="w-4 h-4" />
+                프로젝트 소개
+              </Button>
+            </Link>
+            <Link href="/user-journey" onClick={() => setMobileMenuOpen(false)}>
+              <Button
+                variant="ghost"
+                size="sm"
+                className={`w-full justify-start gap-2 ${
+                  pathname === '/user-journey'
+                    ? 'text-blue-600 bg-blue-50'
+                    : 'text-gray-600'
+                }`}
+              >
+                <Map className="w-4 h-4" />
+                사용자 여정
+              </Button>
+            </Link>
+            <Link href="/work-log" onClick={() => setMobileMenuOpen(false)}>
+              <Button
+                variant="ghost"
+                size="sm"
+                className={`w-full justify-start gap-2 ${
+                  pathname === '/work-log'
+                    ? 'text-blue-600 bg-blue-50'
+                    : 'text-gray-600'
+                }`}
+              >
+                <FileText className="w-4 h-4" />
+                작업일지
+              </Button>
+            </Link>
+            <Link href="/emergency" onClick={() => setMobileMenuOpen(false)}>
+              <Button
+                variant="ghost"
+                size="sm"
+                className={`w-full justify-start gap-2 ${
+                  pathname === '/emergency'
+                    ? 'text-red-600 bg-red-50'
+                    : 'text-red-600'
+                }`}
+              >
+                <Phone className="w-4 h-4" />
+                비상연락
+              </Button>
+            </Link>
+          </nav>
+        )}
       </div>
     </header>
   );
